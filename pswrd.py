@@ -10,9 +10,6 @@ right_pass = bytes(input('Input right pass '), encoding='utf-8')
 print(right_pass)
 text = pad(b'my some secure text')
 
-#sha = hashlib.sha256()
-#sha.update(right_pass)
-#right_key = sha.digest()
 right_key = hashlib.sha256(right_pass).digest()
 
 right_aes = AES.new(right_key, AES.MODE_ECB)
@@ -24,9 +21,6 @@ while True:
     password = bytes(input('Input your pass '), encoding='utf8')
     print(password)
     
-    #sha = hashlib.sha256()
-    #sha.update(password)
-    #key = sha.digest()
     key = hashlib.sha256(password).digest()
 
     try_aes = AES.new(key, AES.MODE_ECB)
