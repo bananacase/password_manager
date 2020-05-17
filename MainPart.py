@@ -10,9 +10,10 @@ from Crypto.Cipher import AES
 
 
 class Window(QWidget):
-	"""Class Window. The constructor creates the main window, doesn't accept some values. You must create an empty file with name 'data.pep' in the same directory for the program to work correctly"""
-    def __init__(self):
-
+    """Class Window. 
+    The constructor creates the main window, doesn't accept any values. You have to create an empty file with name 'data.pep' in the same directory for the program to work correctly"""
+    
+    def __init__(self): 
         super(Window, self).__init__()
 
         #Block fields for writing notes and changing master-password
@@ -63,7 +64,7 @@ class Window(QWidget):
         self.stack5UI()  
             
         hbox = QHBoxLayout(self)
-        hbox.addSpacing(800)
+        hbox.addSpacing(0)
         hbox.addWidget(self.Stack)
 
         #Initialize and show Window
@@ -76,10 +77,11 @@ class Window(QWidget):
 
         #Shortkey for change main layout
         keyboard.add_hotkey("Escape", self.turnBack)
-            
-    def stack0UI(self):
-    	"""First window-layout, when user should enter his master-password."""
+        
+    def stack0UI(self) -> None:
+        """First window-layout, when user should enter his master-password."""
         layout = QHBoxLayout()
+        layout.addSpacing(800)
         butBegin = QPushButton("Начать")
         butBegin.setFont(self.FontFromButtons)
         butBegin.setToolTip("Напишите <b>правильный</b> мастер-пароль")
@@ -97,9 +99,9 @@ class Window(QWidget):
         self.stack0.setLayout(l1)
 
     def butBegin_Click(self):
-    	"""Function which is called when user is trying to start the program.
+        """Function which is called when user is trying to start the program.
 	Function check the correct password and password, which write a user.
-    	"""
+        """
         if not self.mkEdit.text():
             b = QMessageBox(2, "Предупреждение!", "Вы не написали пароль", buttons = QMessageBox.Ok)
             result = b.exec_()
@@ -112,13 +114,13 @@ class Window(QWidget):
             	c = QMessageBox(2, "Предупреждение!", "Вы написали неверный пароль", buttons = QMessageBox.Ok)
             	result = c.exec_()
 
-    def butEnd_Click(self):
-    	"""Function which is called when user clicked a button"""
+    def butEnd_Click(self) -> None:
+        """Function which is called when user clicked a button"""
         self.DumpingAndEncrypt()
         qApp.quit()
             
-    def stack1UI(self):
-    	"""Main window-layout, which contain other widget-layout."""
+    def stack1UI(self) -> None:
+        """Main window-layout, which contain other widget-layout."""
         
         buttonRead = QPushButton("Прочитать")
         buttonRead.setFont(self.FontFromButtons)
@@ -171,10 +173,11 @@ class Window(QWidget):
         layout.addWidget(buttonChangeMK)
         layout.addWidget(buttonChangeNotes)
         layout.addWidget(buttonEnds)
+        layout.setSpacing(20)
         self.stack1.setLayout(layout)
 
-    def stack2UI(self):
-    	"""Widget-layout for displaying user notes"""
+    def stack2UI(self) -> None:
+        """Widget-layout for displaying user notes"""
         layoutForHeading = QHBoxLayout()
         nameSite = QLabel("Название сайта")
         nameSite.setFont(self.FontFromLabels)
@@ -187,9 +190,10 @@ class Window(QWidget):
         self.layoutFromRead.addRow(nameSite, layoutForHeading)
         self.stack2.setLayout(self.layoutFromRead)
 
-    def LoadingAndDecrypt(self):
-    	"""One of two main back-end function. 
-    	This function should encoding user notes."""
+    def LoadingAndDecrypt(self) -> None:
+        """One of two main back-end function. 
+    	This function should encoding user notes.
+        """
         with open('data.pep', 'rb') as f:
             ciphered = pickle.load(f)
         key = hashlib.sha256(self.password).digest()
@@ -197,8 +201,8 @@ class Window(QWidget):
         try_text = try_aes.decrypt(ciphered)
         self.someDict = pickle.loads(try_text)
 
-    def ReadingToDict(self):
-    	"""This function help displaying user notes with back-end."""
+    def ReadingToDict(self) -> None:
+        """This function help displaying user notes with back-end."""
         while 1 < self.layoutFromRead.rowCount():
             self.layoutFromRead.removeRow(1)
 
@@ -222,8 +226,8 @@ class Window(QWidget):
         self.layoutFromRead.addWidget(buttonBack)
         self.layoutFromRead.setSpacing(15)
 
-    def stack3UI(self):
-    	"""Widget-layout that help user add new note."""
+    def stack3UI(self) -> None:
+        """Widget-layout that help user add new note."""
         
         buttonBack = QPushButton("Назад")
         buttonBack.setFont(self.FontFromButtons)
@@ -254,16 +258,16 @@ class Window(QWidget):
         layout.setContentsMargins(20, 20, 20, 20)
         self.stack3.setLayout(layout)
  
-    def WritingToDict(self):
-    	"""Back-end function, that add new note from 'self.stack3UI()'."""
+    def WritingToDict(self) -> None:
+        """Back-end function, that add new note from 'self.stack3UI()'."""
         if (self.addKey.text() not in self.someDict):
             self.someDict.update({self.addKey.text():[self.addLogin.text(), self.addPass.text()]})
         else:
             self.someDict.update({f"{self.addKey.text()}+{self.addLogin.text()}":[self.addLogin.text(), self.addPass.text()]})
         self.display(1)
 
-    def DumpingAndEncrypt(self):
-    	"""Second of two main back-end function. 
+    def DumpingAndEncrypt(self) -> None:
+        """Second of two main back-end function. 
     	This function should decoding user notes."""
         right_pass = self.password
         right_key = hashlib.sha256(right_pass).digest()
@@ -272,8 +276,8 @@ class Window(QWidget):
         with open('data.pep', 'wb') as f:
             pickle.dump(ciphered, f)
 
-    def stack4UI(self):
-    	"""This widget-layout change password in there."""
+    def stack4UI(self) -> None:
+        """This widget-layout change password in there."""
         
         buttonBack = QPushButton("Назад")
         buttonBack.setFont(self.FontFromButtons)
@@ -301,8 +305,8 @@ class Window(QWidget):
         layout.setSpacing(30)
         self.stack4.setLayout(layout)
 
-    def Confirm(self):
-    	"""This back-end function try to change master key. If old password are correctly, that master key change for a new password."""
+    def Confirm(self) -> None:
+        """This back-end function try to change master key. If old password are correctly, that master key change for a new password."""
         if bytes(self.oldPassword.text(), encoding='utf8') == self.password:
             self.password = bytes(self.newPassword.text(), encoding='utf8')
             self.display(1)
@@ -310,14 +314,13 @@ class Window(QWidget):
             b = QMessageBox(2, "Предупреждение!", "Вы написали неверный мастер-пароль", buttons=QMessageBox.Ok)
             result = b.exec_()
 
-    def stack5UI(self):
-    	"""This widget-layout must be like a editor for a user notes, but now this function only know how delete some note. That's all."""
+    def stack5UI(self) -> None:
+        """This widget-layout must be like a editor for a user notes, but now this function only know how delete some note. That's all."""
         buttonBack = QPushButton("Назад")
         buttonBack.setFont(self.FontFromButtons)
         buttonBack.setIcon(QIcon('image\IconBack.png'))
         buttonBack.setIconSize(QSize(30, 30))
         buttonBack.setToolTip("<b>Выйти в предыдущий раздел</b>")
-        #buttonBack.setShortcut("Backspace")
         buttonBack.clicked.connect(lambda *args: self.display(1))
         
         fieldDelNote = QLineEdit()
@@ -335,8 +338,8 @@ class Window(QWidget):
         layout.addWidget(buttonBack)
         self.stack5.setLayout(layout)
 
-    def deleteNote(self, key):
-    	"""Back-end function for deleting note."""
+    def deleteNote(self, key: str) -> None:
+        """Back-end function for deleting note."""
         if key and key in self.someDict:
             self.display(1)
             del self.someDict[key]
@@ -344,18 +347,18 @@ class Window(QWidget):
         	b = QMessageBox(2, "Предупреждение!", "Вы указали неверное название сайта. Проверьте правильность введённых данных", buttons = QMessageBox.Ok)
         	result = b.exec_()
     		
-    def display(self, i):
-    	"""This back-end function help to navigate through the window."""
+    def display(self, i: int) -> None:
+        """This back-end function help to navigate through the window."""
         self.Stack.setCurrentIndex(i)
         if (i == 2): self.ReadingToDict()
 
-    def pad(self, text):
-    	"""Some function, that help a some string object be a bytes object multiple of 32."""
+    def pad(self, text: bytes) -> bytes:
+        """Some function, that help a some string object be a bytes object multiple of 32."""
         while len(text) % 32 != 0:
             text += b' '
         return text
 
-    def closeEvent(self, event):
+    def closeEvent(self, event) -> None:
     	if (self.Stack.currentIndex() != 0):
     		close = QMessageBox.question(self, "Выход из приложения", "Вы хотите сохранить данные перед выходом?", QMessageBox.Yes | QMessageBox.No)
     		if close == QMessageBox.Yes:
@@ -363,17 +366,13 @@ class Window(QWidget):
     		else:
     			event.accept()
 
-    def turnBack(self):
+    def turnBack(self) -> None:
     	"""Function from shortkey Escape helps move to the main window."""
     	if (self.Stack.currentIndex() != 0) and (self.Stack.currentIndex() != 1):
     		self.display(1)
 
 
-def main():
+if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = Window()
     sys.exit(app.exec_())
-
-
-if __name__ == '__main__':
-    main()
