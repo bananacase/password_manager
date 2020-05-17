@@ -98,7 +98,7 @@ class Window(QWidget):
         l1.addWidget(butBegin)
         self.stack0.setLayout(l1)
 
-	    def butBegin_Click(self):
+    def butBegin_Click(self):
         """Function which is called when user is trying to start the program.
 	Function check the correct password and password, which write a user.
         """
