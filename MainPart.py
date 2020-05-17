@@ -13,7 +13,7 @@ class Window(QWidget):
     """Class Window. 
     The constructor creates the main window, doesn't accept any values. You have to create an empty file with name 'data.pep' in the same directory for the program to work correctly"""
     
-    def __init__(self): 
+    def __init__(self) -> None: 
         super(Window, self).__init__()
 
         #Block fields for writing notes and changing master-password
@@ -98,7 +98,7 @@ class Window(QWidget):
         l1.addWidget(butBegin)
         self.stack0.setLayout(l1)
 
-    def butBegin_Click(self):
+	    def butBegin_Click(self):
         """Function which is called when user is trying to start the program.
 	Function check the correct password and password, which write a user.
         """
